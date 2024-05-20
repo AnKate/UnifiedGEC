@@ -1,0 +1,6 @@
+{
+    "pretrained_model_path":"./gectoolkit/properties/model/MacBert",
+    "pretrained_bert_path":"./gectoolkit/properties/model/MacBert",
+    "learning_rate": 5e-5,
+    "epoch_nums": 50
+}

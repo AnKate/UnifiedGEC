@@ -1,0 +1,22 @@
+{
+    "pretrained_model_path": "./gectoolkit/properties/model/GECToR",
+    "batch_size": 128,
+    "max_input_len": 300,
+    "epoch_nums": 20,
+    "tune_bert": true,
+    "learning_rate": 1e-5,
+    "dropout": 0.0,
+    "cuda_device": 0,
+    "labels_namespace": "labels",
+    "detect_namespace": "d_tags",
+    "hidden_dim": 512,
+    "hidden_layers": 0,
+    "worker_num": 8,
+    "min_count": 3,
+    "iterations": 5,
+    "confidence": 0,
+    "min_error_probability": 0,
+    "min_len": 3,
+    "max_len": 50,
+    "save_vocab": false
+}

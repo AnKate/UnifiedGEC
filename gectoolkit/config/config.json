@@ -1,0 +1,17 @@
+{
+    "random_seed":2023,
+    "use_gpu":true,
+    "learning_rate": 6e-5,
+    "train_batch_size":32,
+    "test_batch_size": 32,
+    "epoch_nums": 50,
+    "test_step": 5,
+    "display_train_step": 1,
+    "gpu_id":"2",
+    "training_resume": false,
+    "load_best_config": false,
+    "supervising_mode": "fully_supervised",
+    "validset_divide": true,
+    "test_only": false,
+    "shuffle": true
+}

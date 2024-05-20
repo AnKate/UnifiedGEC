@@ -1,0 +1,19 @@
+{
+    "pretrained_model_path":"./gectoolkit/properties/model/Transformer",
+    "approx":"none", 
+    "backend":"nccl",
+    "loss_type": "FC_FT_CRF",
+    "train_batch_size": 64,
+    "test_batch_size": 1,
+    "dropout":0.2,
+    "embed_dim":512,
+    "hidden_dim": 128,
+    "ff_embed_dim": 2048,
+    "max_output_len":100,
+    "max_input_len": 100,
+    "layers":6,
+    "gamma": 2,
+    "num_heads":8,
+    "learning_rate": 1e-4,
+    "device": "cuda"
+}

@@ -1,0 +1,10 @@
+SIGHAN15/dataset/
+NLPCC18/dataset/
+NLPCC18/evaluator/m2scorer
+CoNLL14/
+BEA19/
+log/
+dataset/
+checkpoint/
+*.bin
+.DS_Store
