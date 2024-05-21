@@ -4,7 +4,15 @@ English | 简体中文
 
 本仓库用于存放GEC工具包UnifiedGEC相关代码。
 
-## Repository Structure
+
+
+## 简介
+
+
+
+
+
+## 框架结构
 ```
 .
 |-- gectoolkit  # 框架的主要代码
@@ -34,35 +42,43 @@ English | 简体中文
 |-- run_gectoolkit.py       # 框架的启动文件
 ```
 
-## 目前已整合的内容
 
-### 模型
-#### Seq2Edit
-- LevenshteinTransformer
-- GECToR
 
-#### Seq2Seq
-- Transformer
-- SynGEC
-- T5
+## UnifiedGEC
+
+### 环境
 
 ### 数据集
-#### Chinese
-- NLPCC18 
-- MuCGEC
 
-#### English
-- FCE
-- CoNLL14
+### 模型调用
 
-#### Low-resource
-- AKCES-GEC (Czech)
-- Falko-MERLIN (German)
-- COWSL2H (Spanish)
+UnifiedGEC共集成了5个模型和7个不同语言的GEC数据集，各模型在数据集上测得的最好表现如下（P/R/F0.5）：
 
+| 模型                       | CoNLL14 (EN)   | FCE (EN)       | NLPCC18 (ZH)   | MuCGEC (ZH)    | AKCES-GEC (CS) | Falko-MERLIN (DE) | COWSL2H (ES)   |
+| -------------------------- | -------------- | -------------- | -------------- | -------------- | -------------- | ----------------- | -------------- |
+| **LevenshteinTransformer** | 13.5/12.6/13.3 |                | 12.6/8.5/10.7  | 6.6/6.4/6.6    |                |                   |                |
+| **GECToR**                 | 52.3/21.7/40.8 | 36.0/20.7/31.3 | 30.9/20.9/28.2 | 33.5/19.1/29.1 | 46.8/8.9/25.3  | 50.8/20.5/39.2    | 24.4/12.9/20.7 |
+| **Transformer**            | 24.1/15.5/21.7 | 20.8/15.9/19.6 | 22.3/20.8/22.0 | 19.7/9.2/16.0  | 44.4/23.6/37.8 | 33.1/18.7/28.7    | 11.8/15.0/12.3 |
+| **T5**                     | 36.6/39.5/37.1 | 29.2/29.4/29.3 | 32.5/21.1/29.4 | 30.2/14.4/24.8 | 52.5/40.5/49.6 | 47.4/50.0/47.9    | 53.7/39.1/49.9 |
+| **SynGEC**                 |                |                |                |                |                |                   |                |
+
+使用时，输入指令：
+
+```shell
+python run_gectoolkit.py -m $MODEL_NAME -d $DATASET_NAME
+```
+
+训练轮数、学习率等参数配置请见`./gectoolkit/config/config.json`文件，模型的详细参数请见`./gectoolkit/properties/models/`下的对应配置。
+
+UnifiedGEC也支持通过命令行修改对应参数：
+
+```shell
+python run_gectoolkit.py -m $MODEL_NAME -d $DATASET_NAME --learning_rate $LR
+```
 
 ### 数据增强
-- error patterns
-- back-translation (T5)
+
+### Prompts
+
 
 
