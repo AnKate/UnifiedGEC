@@ -1,0 +1,5 @@
+{
+    "min_word_keep":5,
+    "min_generate_keep":5,
+    "language":"zh"
+}
