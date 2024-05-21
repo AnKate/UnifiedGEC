@@ -1,4 +1,6 @@
-# UnifiedGEC
+# UnifiedGEC: Integrating Grammatical Error Correction Approaches for Multi-languages with a Unified Framework
+
+English | 简体中文
 
 本仓库用于存放GEC工具包UnifiedGEC相关代码。
 
@@ -11,7 +13,7 @@
     |-- evaluate    # Evaluator抽象类及GEC Evaluator
     |-- llm     # prompts for LLMs
     |-- model   # Model抽象类及已经集成的模型
-    |-- module  # 可复用的组件
+    |-- module  # 可复用的组件(Transformer Layer)
     |-- properties  # 模型的详细配置
     |-- trainer # Trainer的抽象类和supervised_trainer
     |-- utils   # 使用到的其他代码
@@ -31,7 +33,6 @@
     |-- convert.py  # 将生成结果转化为待评估格式的脚本
 |-- run_gectoolkit.py       # 框架的启动文件
 ```
-
 
 ## 目前已整合的内容
 
