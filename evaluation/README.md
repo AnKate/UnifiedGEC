@@ -1,5 +1,5 @@
 ## Evaluation Module
-English | 简体中文
+[English](./README_en.md) | 简体中文
 
 本模块集成了GEC任务上主流的评估工具，包括M2Scorer、ERRANT与ChERRANT。此外，还提供了转换脚本及部分数据集的ground truth。
 
@@ -55,7 +55,7 @@ errant_compare -hyp hyp.m2 -ref ref.m2
 
 #### ChERRANT
 
-官方仓库：https://github.com/HillZhang1999/MuCGEC/tree/main/scorers/ChERRANT
+官方仓库：https://github.com/HillZhang1999/MuCGEC
 
 使用方法参考官方仓库：
 
