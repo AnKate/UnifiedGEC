@@ -108,7 +108,7 @@ python run_gectoolkit.py -m $MODEL_NAME -d $DATASET_NAME --learning_rate $LR
 我们提供了两种数据增强方法（暂时只支持中英文）：
 
 - error patterns：以增、删、改的方式向句子中添加噪声
-- .0back-translation：将句子翻译成另一语言，再翻译回原本的语言
+- back-translation：将句子翻译成另一语言，再翻译回原本的语言
 
 我们在NLPCC18和CoNLL14上做了实验，选取10%的数据来模拟低资源任务的情况（P/R/F0.5/**delta F0.5**）：
 
