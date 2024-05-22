@@ -51,15 +51,14 @@ UnifiedGEC的完整结构如下：
 
 ### 环境
 
-我们的框架使用Python 3.8，可以使用conda构建实验环境：
+我们的框架使用Python 3.8，请先安装allennlp 1.3.0，再安装其他依赖：
 
 ```shell
-conda create -n gec python=3.8
-conda activate gec
+pip install allennlp==1.3.0
 pip install -r requirements.txt
 ```
 
-注：在conda环境下使用pip安装依赖时，jsonnet依赖可能报错，可以使用`conda install jsonnet`完成安装。
+注：在conda环境下使用pip安装allennlp时，jsonnet依赖项可能报错，可以使用`conda install jsonnet`完成安装。
 
 ### 数据集
 

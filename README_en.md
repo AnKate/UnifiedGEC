@@ -48,11 +48,10 @@ Complete structure of UnifiedGEC:
 
 ### Installation
 
-We use Python=3.8 in our experiments. Users can use conda to setup environments for UnifiedGEC:
+We use Python 3.8 in our experiments. Please install allennlp 1.3.0 first, then install other dependencies:
 
 ```shell
-conda create -n gec python=3.8
-conda activate gec
+pip install allennlp==1.3.0
 pip install -r requirements.txt
 ```
 
