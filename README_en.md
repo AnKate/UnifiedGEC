@@ -110,23 +110,23 @@ We provide users with two data augmentation methods (for Chinese and English):
 
 We conduct experiments on NLPCC18 and CoNLL14 datasets, and simulate low-resource cases by choosing 10% data from datasets (P/R/F0.5/**delta F0.5**):
 
-| 模型                       | 数据增强方法     | CoNLL14 (EN)     | NLPCC18 (ZH)        |
-| -------------------------- | ---------------- | ---------------- | ------------------- |
-| **LevenshteinTransformer** | w/o augmentation |                  |                     |
-|                            | error patterns   |                  |                     |
-|                            | back-translation |                  |                     |
-| **GECToR**                 | w/o augmentation | 13.3/20.1/14.2/- | 17.4/17.2/17.4/-   |
-|                            | error patterns   | 14.1/21.1/15.1/**0.9** | 20.2/18.6/19.9/**2.5** |
-|                            | back-translation | 15.3/26.7/16.7/**2.5** | 20.1/17.1/19.4/**2.0** |
-| **Transformer**            | w/o augmentation | 11.7/18.2/12.6/- | 11.6/5.6/9.5/-     |
-|                            | error patterns   | 13.4/21.6/14.5/**1.9** | 11.6/6.3/9.9/**0.4** |
-|                            | back-translation | 15.4/24.2/16.6/**4.0** | 10.3/10.6/10.4/**0.9** |
-| **T5**                     | w/o augmentation | 31.5/32.5/31.7/- | 31.1/16.3/26.3/-    |
-|                            | error patterns   | 31.5/33.8/32.0/**0.3** | 30.4/18.8/27.0/**0.7** |
-|                            | back-tanslation  | 30.8/39.1/32.2/**0.5** |                     |
-| **SynGEC**                 | w/o augmentation |                  |                     |
-|                            | error patterns   |                  |                     |
-|                            | back-translation |                  |                     |
+| Models                     | Data Augmentation method | CoNLL14 (EN)     | NLPCC18 (ZH)        |
+|----------------------------|--------------------------| ---------------- | ------------------- |
+| **LevenshteinTransformer** | w/o augmentation         |                  |                     |
+|                            | error patterns           |                  |                     |
+|                            | back-translation         |                  |                     |
+| **GECToR**                 | w/o augmentation         | 13.3/20.1/14.2/- | 17.4/17.2/17.4/-   |
+|                            | error patterns           | 14.1/21.1/15.1/**0.9** | 20.2/18.6/19.9/**2.5** |
+|                            | back-translation         | 15.3/26.7/16.7/**2.5** | 20.1/17.1/19.4/**2.0** |
+| **Transformer**            | w/o augmentation         | 11.7/18.2/12.6/- | 11.6/5.6/9.5/-     |
+|                            | error patterns           | 13.4/21.6/14.5/**1.9** | 11.6/6.3/9.9/**0.4** |
+|                            | back-translation         | 15.4/24.2/16.6/**4.0** | 10.3/10.6/10.4/**0.9** |
+| **T5**                     | w/o augmentation         | 31.5/32.5/31.7/- | 31.1/16.3/26.3/-    |
+|                            | error patterns           | 31.5/33.8/32.0/**0.3** | 30.4/18.8/27.0/**0.7** |
+|                            | back-tanslation          | 30.8/39.1/32.2/**0.5** |                     |
+| **SynGEC**                 | w/o augmentation         |                  |                     |
+|                            | error patterns           |                  |                     |
+|                            | back-translation         |                  |                     |
 
 Users can use `augment` in command line to use our data augmentation module, and `noise` and `translation` are available values:
 
