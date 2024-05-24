@@ -79,12 +79,12 @@ There are 5 models and 7 datasets across different languages integrated in Unifi
 
 
 | Models                     | CoNLL14 (EN)   | FCE (EN)       | NLPCC18 (ZH)   | MuCGEC (ZH)    | AKCES-GEC (CS) | Falko-MERLIN (DE) | COWSL2H (ES)   |
-|----------------------------| -------------- | -------------- | -------------- | -------------- | -------------- | ----------------- | -------------- |
+| -------------------------- | -------------- | -------------- | -------------- | -------------- | -------------- | ----------------- | -------------- |
 | **LevenshteinTransformer** | 13.5/12.6/13.3 |                | 12.6/8.5/10.7  | 6.6/6.4/6.6    |                |                   |                |
 | **GECToR**                 | 52.3/21.7/40.8 | 36.0/20.7/31.3 | 30.9/20.9/28.2 | 33.5/19.1/29.1 | 46.8/8.9/25.3  | 50.8/20.5/39.2    | 24.4/12.9/20.7 |
 | **Transformer**            | 24.1/15.5/21.7 | 20.8/15.9/19.6 | 22.3/20.8/22.0 | 19.7/9.2/16.0  | 44.4/23.6/37.8 | 33.1/18.7/28.7    | 11.8/15.0/12.3 |
 | **T5**                     | 36.6/39.5/37.1 | 29.2/29.4/29.3 | 32.5/21.1/29.4 | 30.2/14.4/24.8 | 52.5/40.5/49.6 | 47.4/50.0/47.9    | 53.7/39.1/49.9 |
-| **SynGEC**                 |                |                |                |                |                |                   |                |
+| **SynGEC**                 | 50.6/51.8/50.9 | 59.5/52.7/58.0 |                |                | 21.9/27.6/22.8 | 32.2/33.4/32.4    | 9.3/18.8/10.3  |
 
 Users can launch our framework through command line:
 
@@ -122,10 +122,10 @@ We conduct experiments on NLPCC18 and CoNLL14 datasets, and simulate low-resourc
 |                            | back-translation         | 15.4/24.2/16.6/**4.0** | 10.3/10.6/10.4/**0.9** |
 | **T5**                     | w/o augmentation         | 31.5/32.5/31.7/- | 31.1/16.3/26.3/-    |
 |                            | error patterns           | 31.5/33.8/32.0/**0.3** | 30.4/18.8/27.0/**0.7** |
-|                            | back-tanslation          | 30.8/39.1/32.2/**0.5** |                     |
-| **SynGEC**                 | w/o augmentation         |                  |                     |
-|                            | error patterns           |                  |                     |
-|                            | back-translation         |                  |                     |
+|                            | back-tanslation          | 30.8/39.1/32.2/**0.5** | 24.5/22.5/24.1/**-2.2** |
+| ****SynGEC**               | w/o augmentation         | 48.1/46.6/47.7/-       | 32.1/33.7/32.4/- |
+|                            | error patterns           | 48.3/47.9/48.2/**0.5** |                     |
+|                            | back-translation         | 47.1/50.1/47.7/**0.0** | 33.9/37.4/34.6/**2.2** |
 
 Users can use `augment` in command line to use our data augmentation module, and `noise` and `translation` are available values:
 
