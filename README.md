@@ -75,7 +75,6 @@ UnifiedGEC集成的数据集均是处理完成的json格式：
 ```
 
 我们使用的处理后数据集可以从[此处下载](https://drive.google.com/file/d/1UwQQRHW7ueadlQ3Nc8hZNKpklZJLdjaW/view?usp=sharing)。
-
 ### 模型调用
 
 UnifiedGEC共集成了5个模型和7个不同语言的GEC数据集，各模型在数据集上测得的最好表现如下（P/R/F0.5）：
@@ -101,6 +100,8 @@ python run_gectoolkit.py -m $MODEL_NAME -d $DATASET_NAME
 ```
 
 训练轮数、学习率等参数配置请见`./gectoolkit/config/config.json`文件，模型的详细参数请见`./gectoolkit/properties/models/`下的对应配置。
+
+除Transformer外的其他模型需要使用到预训练模型，请下载后存储至`./gectoolkit/properties/model/`对应的模型目录下。我们提供部分预训练模型的下载地址，用户也可以前往huggingface自行下载。
 
 UnifiedGEC也支持通过命令行修改对应参数：
 
