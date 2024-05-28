@@ -39,12 +39,14 @@ class GECDataLoader(AbstractDataLoader):
         self.language_name = dataset.language_name
 
         self.tagging_rule = config["model"]
-        if self.language_name == 'zh':
-            self.model_path = config["pretrained_model_path"] + '/Chinese/'
-        elif self.language_name == 'en':
-            self.model_path = config["pretrained_model_path"] + '/English/'
-        else:
-            self.model_path = config["pretrained_model_path"] + '/Multilingual/'
+        self.model_path = config["pretrained_model_path"]
+        if self.tagging_rule in ["GECToR", "Transformer", "LevenshteinTransformer"]:
+            if self.language_name == 'zh':
+                self.model_path = self.model_path + '/Chinese/'
+            elif self.language_name == 'en':
+                self.model_path = self.model_path + '/English/'
+            else:
+                self.model_path = self.model_path + '/Multilingual/'
 
         # if config["dataset"] in ['sighan15', 'nlpcc18', 'conll14', 'mucgec', 'akces', 'fce']:
         if config['cache_dir'] is not None:

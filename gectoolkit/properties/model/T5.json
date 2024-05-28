@@ -2,7 +2,7 @@
   "architectures": [
     "MT5ForConditionalGeneration"
   ],
-  "pretrained_model_path":"./gectoolkit/properties/model/mT5",
+  "pretrained_model_path":"./gectoolkit/properties/model/T5",
   "d_ff": 1024,
   "d_kv": 64,
   "d_model": 512,

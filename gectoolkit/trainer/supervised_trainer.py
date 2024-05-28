@@ -148,12 +148,7 @@ class SupervisedTrainer(AbstractTrainer):
                 else:
                     new_rewrite_list += [w]
 
-        ret_list = []
-        for w in new_rewrite_list:
-            new_w = w.replace('##', '')
-            ret_list.append(new_w)
-
-        return ret_list
+        return new_rewrite_list
 
     def _train_batch(self, batch):
         batch_loss = self.model(batch, self.dataloader)
@@ -191,11 +186,11 @@ class SupervisedTrainer(AbstractTrainer):
                 if self.config["language"] != 'zh':
                     pred_out = {'Wrong': batch['source_batch'][idx],
                                 'Target': batch['target_batch'][idx],
-                                'Rewrite': ' '.join(rewrite_list)}
+                                'Rewrite': ' '.join(rewrite_list).replace(' ##', '').replace('##','')}
                 else:
                     pred_out = {'Wrong': batch['source_batch'][idx],
                                 'Target': batch['target_batch'][idx],
-                                'Rewrite': ''.join(rewrite_list)}
+                                'Rewrite': ''.join(rewrite_list).replace(' ##', '').replace('##','')}
 
             else:
                 pred_out = {'Wrong': ' '.join(batch['source_batch'][idx]),
