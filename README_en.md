@@ -84,7 +84,14 @@ There are 5 models and 7 datasets across different languages integrated in Unifi
 | **GECToR**                 | 52.3/21.7/40.8 | 36.0/20.7/31.3 | 30.9/20.9/28.2 | 33.5/19.1/29.1 | 46.8/8.9/25.3  | 50.8/20.5/39.2    | 24.4/12.9/20.7 |
 | **Transformer**            | 24.1/15.5/21.7 | 20.8/15.9/19.6 | 22.3/20.8/22.0 | 19.7/9.2/16.0  | 44.4/23.6/37.8 | 33.1/18.7/28.7    | 11.8/15.0/12.3 |
 | **T5**                     | 36.6/39.5/37.1 | 29.2/29.4/29.3 | 32.5/21.1/29.4 | 30.2/14.4/24.8 | 52.5/40.5/49.6 | 47.4/50.0/47.9    | 53.7/39.1/49.9 |
-| **SynGEC**                 | 50.6/51.8/50.9 | 59.5/52.7/58.0 |                |                | 21.9/27.6/22.8 | 32.2/33.4/32.4    | 9.3/18.8/10.3  |
+| **SynGEC**                 | 50.6/51.8/50.9 | 59.5/52.7/58.0 | 36.0/36.8/36.2 | 22.3/26.2/23.6 | 21.9/27.6/22.8 | 32.2/33.4/32.4    | 9.3/18.8/10.3  |
+
+Please create directories for logs and checkpoints before using our framework:
+
+```shell
+mkdir log
+mkdir checkpoint
+```
 
 Users can launch our framework through command line:
 
@@ -93,6 +100,8 @@ python run_gectoolkit.py -m $MODEL_NAME -d $DATASET_NAME
 ```
 
 Refer to `./gectoolkit/config/config.json` for parameters related to training process, such as number of epochs, learning rate. Refer to `./gectoolkit/properties/models/` for detailed parameters of each model.
+
+Models except Transformer require pre-trained models, so please download them and store them in the corresponding model directory under `./gectoolkit/properties/models/`. We provide download links for some of pre-trained models, and users can also download them from Huggingface.
 
 UnifiedGEC also support adjusting parameters via command line:
 
@@ -124,7 +133,7 @@ We conduct experiments on NLPCC18 and CoNLL14 datasets, and simulate low-resourc
 |                            | error patterns           | 31.5/33.8/32.0/**0.3** | 30.4/18.8/27.0/**0.7** |
 |                            | back-tanslation          | 30.8/39.1/32.2/**0.5** | 24.5/22.5/24.1/**-2.2** |
 | ****SynGEC**               | w/o augmentation         | 48.1/46.6/47.7/-       | 32.1/33.7/32.4/- |
-|                            | error patterns           | 48.3/47.9/48.2/**0.5** |                     |
+|                            | error patterns           | 48.3/47.9/48.2/**0.5** | 34.5/36.3/34.9/**2.5** |
 |                            | back-translation         | 47.1/50.1/47.7/**0.0** | 33.9/37.4/34.6/**2.2** |
 
 Users can use `augment` in command line to use our data augmentation module, and `noise` and `translation` are available values:
