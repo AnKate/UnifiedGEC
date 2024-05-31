@@ -29,10 +29,10 @@ class DataGenerator(object):
 
     def __init__(self, language):
         self.language = language
-        self.vocab_path = os.path.join(os.path.dirname(os.getcwd()), "data", "vocab.txt")
-        self.stopword_path = os.path.join(os.path.dirname(os.getcwd()), "data", "stop_words.txt")
-        self.not_common_path = os.path.join(os.path.dirname(os.getcwd()), "data", "生僻字.txt")
-        self.words_path = os.path.join(os.path.dirname(os.getcwd()), "data", "words.txt")
+        self.vocab_path = os.path.join(os.getcwd(), "augmentation", "data", "vocab.txt")
+        self.stopword_path = os.path.join(os.getcwd(), "augmentation", "data", "stop_words.txt")
+        self.not_common_path = os.path.join(os.getcwd(), "augmentation", "data", "生僻字.txt")
+        self.words_path = os.path.join(os.getcwd(), "augmentation", "data", "words.txt")
         self.vocab, self.stopwords, self.words = self.load_data()
 
     def load_data(self):

@@ -59,7 +59,7 @@ PROMPT_FOR_CHINESE_GEC = """
 
 
 def get_examples(dataset_name, count):
-    with open(os.getcwd() + '/dataset/' + dataset_name + '/trainset.json', 'r', encoding='utf-8') as f:
+    with open(os.path.join(os.getcwd(), "dataset", dataset_name, "trainset.json"), 'r', encoding='utf-8') as f:
         train_set = json.load(f)
 
     index_list = []
@@ -72,7 +72,7 @@ def get_examples(dataset_name, count):
     for i in index_list:
         examples.append(train_set[i])
 
-    with open(os.getcwd() + '/dataset/' + dataset_name + '/testset.json', 'r', encoding='utf-8') as f:
+    with open(os.path.join(os.getcwd(), "dataset", dataset_name, "testset.json"), 'r', encoding='utf-8') as f:
         test_set = json.load(f)
 
     return examples, test_set
@@ -127,7 +127,7 @@ def get_prompts(examples, test_set, dataset_name):
 
 
 def run_prompts(model_name, dataset_name, example_count):
-    directory = os.path.join(os.path.dirname(os.getcwd()), 'checkpoint', model_name + '-' + dataset_name)
+    directory = os.path.join(os.getcwd(), 'checkpoint', model_name + '-' + dataset_name)
     if not os.path.exists(directory):
         os.makedirs(directory)
 

@@ -48,7 +48,6 @@ class GECDataLoader(AbstractDataLoader):
             else:
                 self.model_path = self.model_path + '/Multilingual/'
 
-        # if config["dataset"] in ['sighan15', 'nlpcc18', 'conll14', 'mucgec', 'akces', 'fce']:
         if config['cache_dir'] is not None:
             self.pretrained_tokenizer = AutoTokenizer.from_pretrained(self.model_path,
                                                                       cache_dir=config['cache_dir'])
@@ -57,11 +56,6 @@ class GECDataLoader(AbstractDataLoader):
         special_tokens = [SpecialTokens.__dict__[k] for k in SpecialTokens.__dict__ if not re.search('^\_', k)]
         special_tokens.sort()
         self.pretrained_tokenizer.add_special_tokens({'additional_special_tokens': special_tokens})
-            # print(self.pretrained_tokenizer.convert_tokens_to_ids([SpecialTokens.EOS_TOKEN])); exit()
-        # else:
-        #     self.pretrained_tokenizer = AutoTokenizer.from_pretrained(self.model_path)
-        #     self.pretrained_tokenizer.add_special_tokens({'additional_special_tokens': ['[N]']})
-        # print(self.pretrained_tokenizer); exit()
 
         # 当模型是GECToR时, 使用特殊的数据处理方法
         if self.tagging_rule == "GECToR":

@@ -8,9 +8,9 @@ from typing import Union, Type
 from gectoolkit.config.configuration import Config
 
 from gectoolkit.data.dataset.gec_dataset import GECDataset
-
+from gectoolkit.data.dataset.syngec_dataset import SyngecDataset
 from gectoolkit.data.dataloader.gec_dataloader import GECDataLoader
-
+from gectoolkit.data.dataloader.syngec_dataloader import SyngecDataLoader
 from gectoolkit.evaluate.gec_evaluator import GECEvaluator
 
 
@@ -22,7 +22,10 @@ def get_dataset_module(config: Config):
 
     :return: dataset module
     """
-    return GECDataset(config)
+    if config["model"] == "SynGEC":
+        return SyngecDataset(config)
+    else:
+        return GECDataset(config)
 
 
 def get_dataloader_module(config: Config):
@@ -33,7 +36,10 @@ def get_dataloader_module(config: Config):
 
     :return: Dataloader module
     """
-    return GECDataLoader
+    if config["model"] == 'SynGEC':
+        return SyngecDataLoader
+    else:
+        return GECDataLoader
 
 
 def get_evaluator_module(config: Config):

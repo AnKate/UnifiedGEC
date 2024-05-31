@@ -26,6 +26,7 @@ def train_with_train_valid_test_split(temp_config):
         config = Config.load_from_pretrained(temp_config['checkpoint_dir'])
     else:
         config = temp_config
+    config._update(temp_config.internal_config_dict)
     device = config["device"]
 
     logger = getLogger()

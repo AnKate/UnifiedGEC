@@ -22,7 +22,7 @@ class T5(nn.Module):
         self.pad_token_id = self.tokenizer.pad_token_id  # pad id= 0
         self.test_id = 0
 
-    def forward(self, batch, dataloader, is_display):
+    def forward(self, batch, dataloader):
         """
         parameters in batch.
         batch['source_batch'] is a list with the source text sentences;
@@ -108,12 +108,9 @@ class T5(nn.Module):
         loss_dic = {"decode_result": predicted_ids,
                     "loss": loss}
 
-        if is_display:
-            print(self.decode_result[0]); #exit()
         return loss_dic
 
-
-    def model_test(self, batch, dataloader, is_display=False):
+    def model_test(self, batch, dataloader):
         with torch.no_grad():
             language = dataloader.dataset.language_name
 

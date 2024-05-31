@@ -99,9 +99,9 @@ mkdir checkpoint
 python run_gectoolkit.py -m $MODEL_NAME -d $DATASET_NAME
 ```
 
-训练轮数、学习率等参数配置请见`./gectoolkit/config/config.json`文件，模型的详细参数请见`./gectoolkit/properties/models/`下的对应配置。
+训练轮数、学习率等参数配置请见`./gectoolkit/config/config.json`文件，模型的详细参数请见`./gectoolkit/properties/model/`下的对应配置。
 
-除Transformer外的其他模型需要使用到预训练模型，请下载后存储至`./gectoolkit/properties/models/`对应的模型目录下。我们提供部分预训练模型的下载地址，用户也可以前往huggingface自行下载。
+除Transformer外的其他模型需要使用到预训练模型，请下载后存储至`./gectoolkit/properties/model/`对应的模型目录下。我们提供部分预训练模型的下载地址，用户也可以前往huggingface自行下载。
 
 UnifiedGEC也支持通过命令行修改对应参数：
 
