@@ -23,7 +23,7 @@ class SyngecDataset(object):
     def __init__(self, config):
         super().__init__()
         self.model = config["model"]  # Syngec
-        self.dataset = config["data"] # mucgec/nlpcc18
+        self.dataset = config["dataset"] # mucgec/nlpcc18
 
         if config["language"] == 'zh':
             self.language_name = 'Chinese'

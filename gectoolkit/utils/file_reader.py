@@ -58,7 +58,7 @@ def get_model(model_name):
 
     :param model_name: model name
     """
-    model_submodule = ['TtT', 'LevenshteinTransformer', 'GECToR', 'Transformer', 'MacBert', 'LaserTagger', 'T5']
+    model_submodule = ['TtT', 'LevenshteinTransformer', 'GECToR', 'Transformer', 'MacBert', 'LaserTagger', 'T5', 'SynGEC']
     try:
         model_file_name = model_name.lower()
         for submodule in model_submodule:

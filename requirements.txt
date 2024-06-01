@@ -6,7 +6,7 @@ jieba==0.42.1
 Levenshtein==0.25.0
 ltp==4.2.13
 nltk==3.8.1
-numpy==1.21.1
+numpy==1.23.1
 omegaconf==2.3.0
 OpenCC==1.1.2
 openccpy

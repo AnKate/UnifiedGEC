@@ -4,6 +4,7 @@
 # @File: supervised_trainer.py
 
 import os
+import sys
 import time
 import math
 from tqdm import tqdm
@@ -12,11 +13,23 @@ import torch
 from ray import tune
 import numpy as np
 from collections import defaultdict
-
+import ast
 from gectoolkit.trainer.abstract_trainer import AbstractTrainer
 from gectoolkit.utils.enum_type import DatasetType
 from gectoolkit.utils.utils import time_since
 from gectoolkit.utils.file_reader import write_json_data
+from itertools import chain
+from torch.cuda.amp import GradScaler, autocast
+fairseq_path = os.path.abspath(os.path.join(os.getcwd(), "gectoolkit/model/SynGEC/src/src_syngec/fairseq2"))
+sys.path.insert(0, fairseq_path)
+
+from fairseq import checkpoint_utils, distributed_utils, options, tasks, utils
+from fairseq.data import encoders, indexed_dataset, data_utils
+from fairseq.token_generation_constraints import pack_constraints, unpack_constraints
+from fairseq_cli.generate import get_symbols_to_strip_from_output
+from fairseq.nan_detector import NanDetector
+from fairseq.optim import lr_scheduler
+from fairseq import checkpoint_utils, distributed_utils, models, optim, utils
 
 
 class SupervisedTrainer(AbstractTrainer):
@@ -50,8 +63,29 @@ class SupervisedTrainer(AbstractTrainer):
         super().__init__(config, model, dataloader, evaluator)
         self._build_optimizer()
 
+    def _build_fp16_optimizer(self):
+        self.criterion = self.model.criterion
+        # 合并模型和损失函数的参数列表
+        params = list(
+            filter(
+                lambda p: p.requires_grad,
+                chain(self.model.parameters(), self.criterion.parameters()),
+            )
+        )
+        self.args = self.dataloader.args
+        self.optimizer = optim.FP16Optimizer.build_optimizer(self.args, params)
+
+        # We should initialize the learning rate scheduler immediately after
+        # building the optimizer, so that the initial learning rate is set.
+        self._lr_scheduler = lr_scheduler.build_lr_scheduler(self.args, self.optimizer)
+        self._lr_scheduler.step_update(0)
+        return self.optimizer
+
     def _build_optimizer(self):
-        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.config["learning_rate"])
+        if self.config["model"] == "SynGEC":
+            self._build_fp16_optimizer()
+        else:
+            self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.config["learning_rate"])
 
     def _save_checkpoint(self):
         check_pnt = {
@@ -178,27 +212,108 @@ class SupervisedTrainer(AbstractTrainer):
 
             symbols = self.dataloader.replaced_symbols
 
-            if self.config['model'] != 'GECToR':
-                rewrite_list = self.recover_num(self.dataloader.pretrained_tokenizer.convert_ids_to_tokens(test_out[idx]),
-                                                batch['target_batch'][idx], symbols)
-
-                # print(rewrite_list); exit()
-                if self.config["language"] != 'zh':
-                    pred_out = {'Wrong': batch['source_batch'][idx],
-                                'Target': batch['target_batch'][idx],
-                                'Rewrite': ' '.join(rewrite_list).replace(' ##', '').replace('##','')}
-                else:
-                    pred_out = {'Wrong': batch['source_batch'][idx],
-                                'Target': batch['target_batch'][idx],
-                                'Rewrite': ''.join(rewrite_list).replace(' ##', '').replace('##','')}
-
-            else:
+            if self.config['model'] == 'GECToR':
                 pred_out = {'Wrong': ' '.join(batch['source_batch'][idx]),
                             'Target': ' '.join(batch['target_batch'][idx]),
                             'Rewrite': ' '.join(test_out[idx])}
+            else:
+                rewrite_list = self.recover_num(self.dataloader.pretrained_tokenizer.convert_ids_to_tokens(test_out[idx]),
+                                                batch['target_batch'][idx], symbols)
+
+                if self.config['model'] == "T5":
+                    if self.config["language"] != 'zh':
+                        wrong = self.dataloader.pretrained_tokenizer.decode(batch['source_list_batch'][idx])
+                        target = self.dataloader.pretrained_tokenizer.decode(batch['target_list_batch'][idx])
+                        rewrite = self.dataloader.pretrained_tokenizer.decode(test_out[idx], skip_special_tokens=True)
+                        if wrong and wrong[-1] in ['.', '?', '!']:
+                            wrong = wrong[:-1] + ' ' + wrong[-1]
+                        if target and target[-1] in ['.', '?', '!']:
+                            target = target[:-1] + ' ' + target[-1]
+                        if rewrite and rewrite[-1] in ['.', '?', '!']:
+                            rewrite = rewrite[:-1] + ' ' + rewrite[-1]
+                    else:
+                        wrong = ' '.join(batch['source_batch'][idx])
+                        target = ' '.join(batch['target_batch'][idx])
+                        rewrite = ' '.join(rewrite_list)
+                    pred_out = {'Wrong': wrong,
+                                'Target': target,
+                                'Rewrite': rewrite}
+                elif self.config["model"] == "SynGEC":
+                    if self.config["language"] != 'zh':
+                        wrong = self.dataloader.pretrained_tokenizer.decode(batch['source_list_batch'][idx])
+                        target = self.dataloader.pretrained_tokenizer.decode(batch['target_list_batch'][idx])
+                        rewrite = self.dataloader.pretrained_tokenizer.decode(test_out[idx], skip_special_tokens=True)
+                    else:
+                        wrong = ' '.join(
+                            self.dataloader.pretrained_tokenizer.convert_ids_to_tokens(batch['source_list_batch'][idx]))
+                        target = ' '.join(
+                            self.dataloader.pretrained_tokenizer.convert_ids_to_tokens(batch['target_list_batch'][idx]))
+                        rewrite = ' '.join(self.dataloader.pretrained_tokenizer.convert_ids_to_tokens(test_out[idx]))
+                    pred_out = {'Wrong': wrong,
+                                'Target': target,
+                                'Rewrite': rewrite}
+                else:
+                    if self.config["language"] != 'zh':
+                        pred_out = {'Wrong': batch['source_batch'][idx],
+                                    'Target': batch['target_batch'][idx],
+                                    'Rewrite': ' '.join(rewrite_list).replace(' ##', '').replace('##','')}
+                    else:
+
+                        pred_out = {'Wrong': batch['source_batch'][idx],
+                                    'Target': batch['target_batch'][idx],
+                                    'Rewrite': ''.join(rewrite_list).replace(' ##', '').replace('##','')}
+
             predict_out.append(pred_out)
 
         return predict_out, precisions, recalls, F_list
+
+    def _syngec_update(self,loss,sample_size,batch_idx,is_dummy_batch=False):
+        with torch.autograd.profiler.record_function("backward"):
+            self.optimizer.backward(loss)
+
+        if is_dummy_batch:
+            if torch.is_tensor(sample_size):
+                sample_size.zero_()
+            else:
+                sample_size *= 0.0
+
+        if torch.is_tensor(sample_size):
+            sample_size = sample_size.float()
+        else:
+            sample_size = float(sample_size)
+
+        overflow = False
+        try:
+            with torch.autograd.profiler.record_function("multiply-grads"):
+                # multiply gradients by (# GPUs / sample_size) since DDP
+                # already normalizes by the number of GPUs. Thus we get
+                # (sum_of_gradients / sample_size).
+                self.optimizer.multiply_grads(
+                    1 / sample_size
+                )
+                # print('---- 运行了self.optimizer.multiply_grads( self.data_parallel_world_size / sample_size')
+
+            with torch.autograd.profiler.record_function("clip-grads"):
+                # clip grads
+                grad_norm = self.optimizer.clip_grad_norm(self.optimizer.args.clip_norm, aggregate_norm_fn=None)
+                # print('---- grad_norm:',grad_norm)
+
+            with torch.autograd.profiler.record_function("optimizer"):
+                # take an optimization step
+                # print('---- self.optimizer.step()')
+                self.optimizer.step()
+
+        except OverflowError as e:
+            overflow = True
+            self.logger.info("| supervised_trainer |NOTE: overflow detected, " + str(e))
+            grad_norm = torch.tensor(0.0).cuda()
+            # print('---- OverflowError：',e)
+            # print('---- OverflowError：self.zero_grad()')
+            self.optimizer.zero_grad()
+        if not overflow:
+            self._lr_scheduler.step_update(batch_idx)
+            # print('当前lr:',self.optimizer.get_lr())
+
 
     def _train_epoch(self):
         epoch_start_time = time.time()
@@ -215,9 +330,12 @@ class SupervisedTrainer(AbstractTrainer):
                 if 'loss' in k:
                     loss_total[k] += [batch_loss[k]]
 
-            batch_loss["loss"].backward()
-            torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
-            self.optimizer.step()
+            if self.config["model"] == "SynGEC":
+                self._syngec_update(batch_loss['loss'], batch_loss['sample_size'], batch_idx)
+            else:
+                batch_loss["loss"].backward()
+                torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
+                self.optimizer.step()
 
         self.optimizer.zero_grad()
         self.model.zero_grad()

@@ -35,7 +35,10 @@ def train_with_train_valid_test_split(temp_config):
     dataset = get_dataset_module(config)
     dataset._load_dataset()
     dataloader = get_dataloader_module(config)(config, dataset)
-    model = get_model(config["model"])(config, dataloader.pretrained_tokenizer)
+    if config["model"] == 'SynGEC':
+        model = get_model(config["model"])(config, dataloader)
+    else:
+        model = get_model(config["model"])(config, dataloader.pretrained_tokenizer)
     if device:
         model = model.cuda(device)
 
