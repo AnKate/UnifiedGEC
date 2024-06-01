@@ -25,7 +25,16 @@ class SyngecDataset(object):
         self.model = config["model"]  # Syngec
         self.dataset = config["data"] # mucgec/nlpcc18
 
-        self.language_name = config["language_name"] # Spanish
+        if config["language"] == 'zh':
+            self.language_name = 'Chinese'
+        elif config["language"] == 'en':
+            self.language_name = 'English'
+        elif config["language"] == 'cs':
+            self.language_name = 'Czech'
+        elif config["language"] == 'es':
+            self.language_name = 'Spanish'
+        elif config["language"] == 'de':
+            self.language_name = 'German'
 
         self.dataset_path = config['dataset_dir'] if config['dataset_dir'] else config["dataset_path"] # 用不上 data/mucgec
 
