@@ -6,6 +6,8 @@ This is the official repository of UnifiedGEC.
 
 ## Introduction
 
+![](./UnifiedGEC.pdf)
+
 UnifiedGEC is an open-source, GEC-oriented framework, which integrates 5 GEC models of different architecture and 7 GEC datasets across different languages.
 
 Our framework is user-friendly, and users can train a model on a dataset with a single command. Moreover, users are able to deal with low-resource tasks with our proposed data augmentation module, or use given prompts to conduct experiments on LLMs.
