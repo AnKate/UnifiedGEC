@@ -8,7 +8,7 @@
 
 ## 简介
 
-![](./UnifiedGEC.pdf)
+![](./UnifiedGEC.jpg)
 
 UnifiedGEC是一个面向GEC设计的开源框架，集成了**5个不同架构的GEC模型和7个不同语种的GEC数据集**。
 
