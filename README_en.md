@@ -205,10 +205,10 @@ Our framework allows users to add new datasets. The new dataset folder `dataset_
 
 ```
 dataset
-	|-- dataset_name
-			|-- trainset.json
-			|-- validset.json
-			|-- testset.json
+    |-- dataset_name
+        |-- trainset.json
+        |-- validset.json
+        |-- testset.json
 ```
 
 After that, users also need to add a configuration file `dataset_name.json` in the `gectoolkit/properties/dataset` directory, and the contents of the file can refer to other files in the same directory.
