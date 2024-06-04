@@ -201,10 +201,10 @@ python run_gectoolkit.py -m $MODEL_NAME -d $DATASET_NAME --learning_rate $LR
 
 ```
 dataset
-	|-- dataset_name
-			|-- trainset.json
-			|-- validset.json
-			|-- testset.json
+    |-- dataset_name
+        |-- trainset.json
+        |-- validset.json
+        |-- testset.json
 ```
 
 另外，还需要在`gectoolkit/properties/dataset/`目录下新增相应的数据集配置文件，内容可以参考同目录下的其他数据集配置。
