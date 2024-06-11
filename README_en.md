@@ -356,7 +356,7 @@ There are 5 models and 7 datasets across different languages integrated in Unifi
   </thead>
   <tbody>
     <tr>
-      <td align="center">Levenshtein Transforer</td>
+      <td align="center">Levenshtein Transformer</td>
       <td align="center">13.5</td>
       <td align="center">12.6</td>
       <td align="center">13.3</td>
@@ -460,7 +460,7 @@ The best performance of implemented models on datasets of other languages:
   </thead>
   <tbody>
     <tr>
-      <td align="center">Levenshtein Transforer</td>
+      <td align="center">Levenshtein Transformer</td>
       <td align="center">4.4</td>
       <td align="center">5.0</td>
       <td align="center">4.5</td>

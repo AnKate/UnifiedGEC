@@ -358,7 +358,7 @@ UnifiedGEC共集成了5个模型和7个不同语言的GEC数据集，各模型�
   </thead>
   <tbody>
     <tr>
-      <td align="center">Levenshtein Transforer</td>
+      <td align="center">Levenshtein Transformer</td>
       <td align="center">13.5</td>
       <td align="center">12.6</td>
       <td align="center">13.3</td>
@@ -462,7 +462,7 @@ UnifiedGEC共集成了5个模型和7个不同语言的GEC数据集，各模型�
   </thead>
   <tbody>
     <tr>
-      <td align="center">Levenshtein Transforer</td>
+      <td align="center">Levenshtein Transformer</td>
       <td align="center">4.4</td>
       <td align="center">5.0</td>
       <td align="center">4.5</td>
