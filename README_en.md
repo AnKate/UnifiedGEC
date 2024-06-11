@@ -464,12 +464,12 @@ The best performance of implemented models on datasets of other languages:
       <td align="center">4.4</td>
       <td align="center">5.0</td>
       <td align="center">4.5</td>
-      <td align="center"></td>
-      <td align="center"></td>
-      <td align="center"></td>
-      <td align="center"></td>
-      <td align="center"></td>
-      <td align="center"></td>
+      <td align="center">2.3</td>
+      <td align="center">4.2</td>
+      <td align="center">2.5</td>
+      <td align="center">1.9</td>
+      <td align="center">2.3</td>
+      <td align="center">2.0</td>
     </tr>
     <tr>
       <td align="center">GECToR</td>
