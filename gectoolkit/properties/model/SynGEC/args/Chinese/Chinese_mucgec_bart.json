@@ -1,10 +1,7 @@
 {
     "data": "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/chinese_mucgec_with_syntax_transformer/bin",
     "user_dir": "./gectoolkit/model/SynGEC/src/src_syngec/syngec_model",
-    "save_dir": "./gectoolkit/properties/model/SynGEC/preprocess/model/syngec/chinese_mucgec_with_syntax_transformer/",
-    "finetune_from_model": "./gectoolkit/properties/model/SynGEC/preprocess/model/syngec/baseline_bart_model/chinese_bart_baseline.pt",
-    "encoder_json": "./gectoolkit/properties/model/SynGEC/preprocess/pretrained_weights/encoder.json",
-    "vocab_bpe": "./gectoolkit/properties/model/SynGEC/preprocess/pretrained_weights/vocab.bpe",
+    "restore_file": "./gectoolkit/properties/model/SynGEC/preprocess/baseline_bart_model/chinese_bart_baseline.pt",
     "batch_size": null,
     "max_tokens": null,
     "no_progress_bar": false,
@@ -209,7 +206,6 @@
     "update_freq": [
         1
     ],
-    "restore_file": "checkpoint_last.pt",
     "reset_dataloader": false,
     "reset_lr_scheduler": false,
     "reset_meters": false,

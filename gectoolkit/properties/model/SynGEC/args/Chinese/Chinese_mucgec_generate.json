@@ -1,7 +1,7 @@
 {
     "data": "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/chinese_mucgec_with_syntax_transformer/bin",
     "conll_file": [
-         "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/chinese_mucgec_test_with_syntax_bart/bin/test.conll.src-tgt.src"
+        "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/chinese_mucgec_test_with_syntax_bart/bin/test.conll.src-tgt.src"
     ],
     "dpd_file": [
         "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/chinese_mucgec_test_with_syntax_bart/bin/test.dpd.src-tgt.src"
@@ -9,10 +9,7 @@
     "probs_file": [
         "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/chinese_mucgec_test_with_syntax_bart/bin/test.probs.src-tgt.src"
     ],
-    "src_char_path": "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/chinese_mucgec_test_with_syntax_bart/test.char.src",
-    "tgt_char_path": "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/chinese_mucgec_test_with_syntax_bart/test.char.tgt",
-    "encoder_json": "./gectoolkit/properties/model/SynGEC/preprocess/pretrained_weights/encoder.json",
-    "vocab_bpe": "./gectoolkit/properties/model/SynGEC/preprocess/pretrained_weights/vocab.bpe",
+    "user_dir": "./gectoolkit/model/SynGEC/src/src_syngec/syngec_model",
     "buffer_size": 10000,
     "batch_size": null,
     "no_progress_bar": false,

@@ -1,15 +1,15 @@
 {
+    "data": "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/german_falko_test_with_syntax_bart/bin",
     "conll_file": [
-        "./proprecess/syngec/preprocess_data/german_falko_test_with_syntax_bart/bin/test.conll.src-tgt.src"
+        "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/german_falko_test_with_syntax_bart/bin/test.conll.src-tgt.src"
     ],
     "dpd_file": [
-        "./proprecess/syngec/preprocess_data/german_falko_test_with_syntax_bart/bin/test.dpd.src-tgt.src"
+        "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/german_falko_test_with_syntax_bart/bin/test.dpd.src-tgt.src"
     ],
     "probs_file": [
-        "./proprecess/syngec/preprocess_data/german_falko_test_with_syntax_bart/bin/test.probs.src-tgt.src"
+        "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/german_falko_test_with_syntax_bart/bin/test.probs.src-tgt.src"
     ],
     "user_dir": "./gectoolkit/model/SynGEC/src/src_syngec/syngec_model",
-    "data": "./proprecess/syngec/preprocess_data/german_falko_test_with_syntax_bart/bin",
     "use_syntax": true,
     "no_progress_bar": false,
     "log_interval": 100,

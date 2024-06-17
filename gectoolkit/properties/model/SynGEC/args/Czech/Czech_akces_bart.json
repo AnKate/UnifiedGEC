@@ -1,7 +1,7 @@
 {
     "data": "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/czech_akces_with_syntax_bart/bin",
     "user_dir": "./gectoolkit/model/SynGEC/src/src_syngec/syngec_model",
-    "restore_file": "./gectoolkit/properties/model/SynGEC/preprocess/model/syngec/baseline_bart_model/czech_akces_bart_baseline.pt",
+    "restore_file": "./gectoolkit/properties/model/SynGEC/preprocess/baseline_bart_model/czech_akces_bart_baseline.pt",
     "no_progress_bar": false,
     "log_interval": 100,
     "log_format": "tqdm",

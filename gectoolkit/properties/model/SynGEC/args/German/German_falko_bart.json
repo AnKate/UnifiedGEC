@@ -1,7 +1,7 @@
 {
-    "data": "./proprecess/syngec/preprocess_data/german_falko_with_syntax_bart/bin",
+    "data": "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/german_falko_with_syntax_bart/bin",
     "user_dir": "./gectoolkit/model/SynGEC/src/src_syngec/syngec_model",
-    "restore_file": "./proprecess/syngec/model/syngec/baseline_bart_model/german_falko_bart_baseline.pt",
+    "restore_file": "./gectoolkit/properties/model/SynGEC/preprocess/baseline_bart_model/german_falko_bart_baseline.pt",
     "no_progress_bar": false,
     "log_interval": 100,
     "log_format": "tqdm",
