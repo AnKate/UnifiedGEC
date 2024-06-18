@@ -1,5 +1,5 @@
 {
-    "data": "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/chinese_nlpcc18_with_syntax_transformer/bin",
+    "data": "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/chinese_nlpcc18_with_syntax_bart/bin",
     "user_dir": "./gectoolkit/model/SynGEC/src/src_syngec/syngec_model",
     "restore_file": "./gectoolkit/properties/model/SynGEC/preprocess/baseline_bart_model/chinese_bart_baseline.pt",
     "batch_size": null,

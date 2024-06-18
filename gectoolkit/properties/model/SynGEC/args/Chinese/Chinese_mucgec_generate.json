@@ -1,5 +1,5 @@
 {
-    "data": "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/chinese_mucgec_with_syntax_transformer/bin",
+    "data": "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/chinese_mucgec_with_syntax_bart/bin",
     "conll_file": [
         "./gectoolkit/properties/model/SynGEC/preprocess/preprocess_data/chinese_mucgec_test_with_syntax_bart/bin/test.conll.src-tgt.src"
     ],
