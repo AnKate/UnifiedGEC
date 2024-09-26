@@ -54,11 +54,9 @@ class SyngecDataset(object):
         self.folds = []
         self.folds_id = []
 
-        # 中文tokenizer：关于字符-id的字典
         self.src_dict = []
         self.tgt_dict = []
 
-        # 英文tokenizer：关于字符-id的字典
         self.encoder_json = config['encoder_json']
         self.vocab_bpe = config['vocab_bpe']
 
@@ -67,11 +65,9 @@ class SyngecDataset(object):
         generate_path = os.path.join(os.getcwd(), "gectoolkit", "properties", "model", "SynGEC", "args", self.language_name,
                                      self.language_name + '_' + self.dataset + '_generate.json')
 
-        # 获取bart和generate的参数
         self.args_bart = self.load_args(bart_path)
         self.args_generate = self.load_args(generate_path)
 
-        # 根据args的json文件，创建task任务
         self.task_bart = self.load_task(self.args_bart)
         self.task_generate = self.load_task(self.args_generate)
 
@@ -110,12 +106,10 @@ class SyngecDataset(object):
             testset = task.datasets['test']
 
         elif self.language_name == 'Chinese':
-            # 读取句法信息，这里直接复用了写好的dataset
             src_conll_dataset = None
             src_dpd_dataset = None
             src_probs_dataset = None
             if task.args.conll_file:
-                # 句法掩码矩阵(GAT&GCN)
                 src_conll_dataset = []
                 src_conll_paths = task.args.conll_file
                 for src_conll_path in src_conll_paths:
@@ -127,7 +121,6 @@ class SyngecDataset(object):
                         print(src_conll_path)
                         raise FileNotFoundError
                 if task.args.dpd_file:
-                    # 依存距离矩阵(DSA)
                     src_dpd_dataset = []
                     src_dpd_paths = task.args.dpd_file
                     for src_dpd_path in src_dpd_paths:
@@ -139,7 +132,6 @@ class SyngecDataset(object):
                             print(src_dpd_path)
                             raise FileNotFoundError
                 if task.args.probs_file:
-                    # 句法概率矩阵(Soft GCN)
                     src_probs_dataset = []
                     src_probs_paths = task.args.probs_file
                     for src_probs_path in src_probs_paths:
@@ -151,24 +143,20 @@ class SyngecDataset(object):
                             print(src_probs_path)
                             raise FileNotFoundError
 
-                        # 获取test中 原始句子，正确句子（每个字之间用空格分割），
                         with open(task.args.src_char_path, 'r', encoding='utf-8') as file:
                             src_lines = file.readlines()
                         with open(task.args.tgt_char_path, 'r', encoding='utf-8') as file:
                             tgt_lines = file.readlines()
 
-                        # 中文：src_lines=['冬 阴 功','不 复 杂']
                         src_lines = [line.strip() for line in src_lines]
                         tgt_lines = [line.strip() for line in tgt_lines]
 
-                        # 进行encode(list:2000) src_tokens=[tensor([1104,..]),tensor(),...]
                         src_tokens = [
                             task.source_dictionary.encode_line(
                                 src_str, add_if_not_exist=False
                             ).long()
                             for src_str in src_lines
                         ]
-                        # 获取每个lines的长度 src_lengths=[45,34,..]
                         src_lengths = [t.numel() for t in src_tokens]
 
                         tgt_tokens = [

@@ -57,7 +57,7 @@ class GECDataLoader(AbstractDataLoader):
         special_tokens.sort()
         self.pretrained_tokenizer.add_special_tokens({'additional_special_tokens': special_tokens})
 
-        # 当模型是GECToR时, 使用特殊的数据处理方法
+        # customized configuration for GECToR
         if self.tagging_rule == "GECToR":
             bert_token_indexer = PretrainedTransformerIndexer(model_name=self.model_path, namespace="bert")
             self.pretrained_tokenizer = {'bert': bert_token_indexer}
@@ -68,12 +68,7 @@ class GECDataLoader(AbstractDataLoader):
             self.skip_complex = config["skip_complex"]
             self.save_vocab = config["save_vocab"]
 
-        # if self.language_name == 'zh':
-        #     self.pre_tokenizer = lambda x: [w for w in x.strip()]
-        # else:
-        #     self.pre_tokenizer = lambda x: self.pretrained_tokenizer.tokenize(x, add_special_tokens=False)
-
-        # 处理unknown token
+        # handler for unknown token
         self.replaced_symbols = []
 
         self.__init_batches()
@@ -200,7 +195,7 @@ class GECDataLoader(AbstractDataLoader):
 
         source_lines = []
         target_lines = []
-        removed_sent_id = []    # 用于记录在这一步骤中被跳过的句子id
+        removed_sent_id = []
         for i in range(len(datas)):
             data = datas[i]
             if self.language_name == "zh":
@@ -218,7 +213,7 @@ class GECDataLoader(AbstractDataLoader):
 
         assert len(source_lines) == len(target_lines)
 
-        # preprocess, 生成vocab.txt和label格式的数据
+        # preprocess
         if set_type == 'train' and self.save_vocab:
             save_vocab_flag = True
         else:
@@ -228,9 +223,8 @@ class GECDataLoader(AbstractDataLoader):
         # exit()
 
         instances = []
-        # 实现datareader的功能, 基于label格式的数据生成对应fields, 同时在这一步中将token转换为id
+        # datareader module
         for tagged_line in tagged_text:
-            # print(tagged_line)
             tokens_and_tags = [pair.rsplit("SEPL|||SEPR") for pair in tagged_line.split(" ")]
             try:
                 tokens = [Token(token) for token, tag in tokens_and_tags]
@@ -246,7 +240,7 @@ class GECDataLoader(AbstractDataLoader):
                 tokens = tokens[:self.max_input_len]
                 tags = None if tags is None else tags[:self.max_input_len]
 
-            # 将tokenize后的token序列转为instance实例对象
+            # turn tokenized tokens into instances
             fields = {}
             sequence = TextField(tokens, self.pretrained_tokenizer)  # token_indexer将tokens转为ids
             fields["tokens"] = sequence
@@ -273,9 +267,8 @@ class GECDataLoader(AbstractDataLoader):
 
                 instance = Instance(fields)
 
-                # DatasetReader的功能完成, 此处需要通过vocab完成token到index的转换
+                # transfer token into index
                 instance.index_fields(vocab)
-                # print(instance); exit()
                 instances.append(instance)
 
         assert len(instances) == len(tagged_text)

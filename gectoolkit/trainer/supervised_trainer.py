@@ -65,7 +65,6 @@ class SupervisedTrainer(AbstractTrainer):
 
     def _build_fp16_optimizer(self):
         self.criterion = self.model.criterion
-        # 合并模型和损失函数的参数列表
         params = list(
             filter(
                 lambda p: p.requires_grad,
@@ -291,16 +290,13 @@ class SupervisedTrainer(AbstractTrainer):
                 self.optimizer.multiply_grads(
                     1 / sample_size
                 )
-                # print('---- 运行了self.optimizer.multiply_grads( self.data_parallel_world_size / sample_size')
 
             with torch.autograd.profiler.record_function("clip-grads"):
                 # clip grads
                 grad_norm = self.optimizer.clip_grad_norm(self.optimizer.args.clip_norm, aggregate_norm_fn=None)
-                # print('---- grad_norm:',grad_norm)
 
             with torch.autograd.profiler.record_function("optimizer"):
                 # take an optimization step
-                # print('---- self.optimizer.step()')
                 self.optimizer.step()
 
         except OverflowError as e:
@@ -312,7 +308,6 @@ class SupervisedTrainer(AbstractTrainer):
             self.optimizer.zero_grad()
         if not overflow:
             self._lr_scheduler.step_update(batch_idx)
-            # print('当前lr:',self.optimizer.get_lr())
 
 
     def _train_epoch(self):
@@ -435,7 +430,6 @@ class SupervisedTrainer(AbstractTrainer):
         test_time_cost = time_since(time.time() - test_start_time)
         return predict_out, precision / eval_total, recall / eval_total, F / eval_total, eval_total, test_time_cost
 
-    # test only模式下调用该函数进行测试
     def test(self):
         """test model.
         """

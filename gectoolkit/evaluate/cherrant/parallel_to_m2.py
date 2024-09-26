@@ -24,19 +24,11 @@ def annotate(line):
     """
     sent_list = line.split("\t")
 
-    source = sent_list[0]  # sent_list 中提取第一个元素，即源文本的部分
+    source = sent_list[0]
 
-    # if args.segmented:
-    #     source = source.strip()  # source 进行去除首尾空白字符的处理
-    # else:
-    #     source = "".join(source.strip().split())  # source 的空白字符全部去除后合并成一个字符串
-
-    output_str = ""  # 存储处理后的输出结果。
+    output_str = ""
 
     for idx, target in enumerate(sent_list[1:]):
-        # print("source: ", source)
-        # print("target: ", target)
-        # print(sentence_to_tokenized)
         source = source.replace(" ", "")
         target = target.replace(" ", "")
         source_tokenized, target_tokenized = sentence_to_tokenized[source], sentence_to_tokenized[target]
@@ -45,22 +37,7 @@ def annotate(line):
             output_str += "".join(out[:-1])
         else:
             output_str += "".join(out[1:-1])
-        # # pdb.set_trace()
-        # try:
-        #     # if args.segmented:
-        #     #     target = target.strip()
-        #     # else:
-        #     #     target = "".join(target.strip().split())
-        #     # if not args.no_simplified:
-        #     #     target = cc.convert(target)
-        #     source_tokenized, target_tokenized = sentence_to_tokenized[source], sentence_to_tokenized[target]
-        #     out, cors = annotator(source_tokenized, target_tokenized, idx)
-        #     if idx == 0:
-        #         output_str += "".join(out[:-1])
-        #     else:
-        #         output_str += "".join(out[1:-1])
-        # except Exception:
-        #     raise Exception
+
     return output_str
 
 
@@ -81,38 +58,25 @@ class Args:
 
 
 def main(args):
-    # 构造分词器 tokenizer = Tokenizer('char',)   ('优秀', 'a', ['you', 'xiu']),
-    # pdb.set_trace()
 
     tokenizer = Tokenizer(args.granularity, args.device, args.segmented, args.bpe)
     global annotator, sentence_to_tokenized
-    # 构造标注器
-    # pdb.set_trace()
 
     annotator = Annotator.create_default(args.granularity, args.multi_cheapest_strategy)
 
-    # format: id src tgt1 tgt2...
-    # read() 方法读取整个文件的内容为一个字符串，并 .strip() 方法去除首尾的空白字符（包括换行符）。最后，.split("\n") 方法按照换行符对字符串进行分割，将文本文件分成多行，返回一个列表 lines
 
     lines = open(args.file, "r", encoding="utf-8").read().strip().split("\n")  # lines: ['1 hello world', '2 hi there'
-    # print('lines:', lines)
-    # error_types = []
 
     with open(args.output, "w", encoding="utf-8") as f:
-        # pdb.set_trace()
 
         count = 0
         sentence_set = set()
         sentence_to_tokenized = {}
 
         for line in lines:
-            # pdb.set_trace()
-
-            # sent_list = line.split("\t")[1:]
             sent_list = line.split("\t")
             for idx, sent in enumerate(sent_list):
                 if args.segmented:
-                    # print(sent)
                     sent = sent.strip()
                 else:
                     sent = "".join(sent.split()).strip()
@@ -138,14 +102,12 @@ def main(args):
             for s, r in zip(batch, results):
                 sentence_to_tokenized[s] = r  # Get tokenization map.
 
-        # 单进程模式
         for line in (lines):
             # pdb.set_trace()
             ret = annotate(line)
             f.write(ret)
             f.write("\n")
 
-            # 多进程模式：仅在Linux环境下测试，建议在linux服务器上使用
         # with Pool(args.worker_num) as pool:
         #     for ret in pool.imap(annotate, tqdm(lines), chunksize=8):
         #         if ret:
@@ -166,10 +128,10 @@ if __name__ == "__main__":
                         action="store_true")
     parser.add_argument("-s", "--multi_cheapest_strategy", type=str, choices=["first", "all"], default="all")
     parser.add_argument("--segmented", help="Whether tokens have been segmented",
-                        action="store_true")  # 支持提前token化，用空格隔开
+                        action="store_true")
     parser.add_argument("--no_simplified", help="Whether simplifying chinese",
-                        action="store_true")  # 将所有corrections转换为简体中文
-    parser.add_argument("--bpe", help="Whether to use bpe", action="store_true")  # 支持 bpe 切分英文单词
+                        action="store_true")
+    parser.add_argument("--bpe", help="Whether to use bpe", action="store_true")
     args = parser.parse_args()
     parser.format_help()
     main(args)

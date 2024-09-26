@@ -21,12 +21,12 @@ def main(args):
         # Simplify the edits into lists of lists
         # if "A1" in sent[0] or "A1" in sent[1] or sent_id in sent_id_cons:
         #     sent_id_cons.append(sent_id)
-        src = sent[0].split("\n")[0]                               # 原始字符串 'S 煤 田 您 的 工 厂 排 出 一 量 很 大 的 臭 味 让 这 里 的 空 气 被 污 染 ， 在 这 里 的 人 整 天 都 吸 著 这 个 臭 味 ， 真 让 身 体 不 舒 服 ， 也 有'
-        hyp_edits = simplify_edits(sent[0], args.max_answer_num)   # predict的操作：[[-1, -1, 'noop', '-NONE-', 0]]/ [0, 2, 'S', '每天', 0]
-        ref_edits = simplify_edits(sent[1], args.max_answer_num)   # target的操作： [[-1, -1, 'noop', '-NONE-', 0]]/ [[0, 2, 'S', '每天', 0], [8, 9, 'S', '大', 0]]
+        src = sent[0].split("\n")[0]
+        hyp_edits = simplify_edits(sent[0], args.max_answer_num)
+        ref_edits = simplify_edits(sent[1], args.max_answer_num)
         # Process the edits for detection/correction based on args
-        hyp_dict = process_edits(hyp_edits, args) # {0: {(-1, -1, 'noop', '-NONE-'): ['noop']}}/ {0: {(0, 2, 'S', '每天'): ['S']}}
-        ref_dict = process_edits(ref_edits, args) # {0: {(-1, -1, 'noop', '-NONE-'): ['noop']}}/ {0: {(0, 2, 'S', '每天'): ['S'], (8, 9, 'S', '大'): ['S']}}
+        hyp_dict = process_edits(hyp_edits, args)
+        ref_dict = process_edits(ref_edits, args)
         if  args.reference_num is None or len(ref_dict.keys()) == args.reference_num:
             # Evaluate edits and get best TP, FP, FN hyp+ref combo.
             count_dict, cat_dict = evaluate_edits(src,
@@ -117,7 +117,6 @@ def parse_args():
         help="Print verbose output.",
         action="store_true")
 
-    # 互斥（mutually exclusive）的命令行参数组 能指定其中一个参数
     eval_type = parser.add_mutually_exclusive_group() #
     eval_type.add_argument(
         "-dt",
@@ -178,14 +177,14 @@ def simplify_edits(sent, max_answer_num):
     for edit in edits:
         # Preprocessing
         if edit.startswith("A "):
-            edit = edit[2:].split("|||")    # Ignore "A " then split.  ['0 2', 'S', '每 天', 'REQUIRED', '-NONE-', '0']
-            span = edit[0].split()          # ['0', '2']
-            start = int(span[0])            # 开始操作位置
-            end = int(span[1])              # 结束操作位置
-            cat = edit[1]                   # 操作 ‘noop’/‘S’
-            cor = edit[2].replace(" ", "")  # ‘-NONE-’/‘每 天’
-            coder = int(edit[-1])           # edit最后一个字符 0
-            out_edit = [start, end, cat, cor, coder]   # [0, 2, 'S', '每天', 0]
+            edit = edit[2:].split("|||")
+            span = edit[0].split()
+            start = int(span[0])
+            end = int(span[1])
+            cat = edit[1]
+            cor = edit[2].replace(" ", "")
+            coder = int(edit[-1])
+            out_edit = [start, end, cat, cor, coder]
             out_edits.append(out_edit)
     # return [edit for edit in out_edits if edit[-1] in [0,1]]
     if max_answer_num is None:

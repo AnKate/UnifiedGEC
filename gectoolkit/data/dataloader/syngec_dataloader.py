@@ -140,37 +140,28 @@ class SyngecEnglishTokenizer(object):
 class SyngecDataLoader(AbstractDataLoader):
     def __init__(self, config: Config, dataset: SyngecDataset):
         super().__init__(config, dataset)
-        # 获取到数据集
         self.dataset = dataset
-        # 获取到三个数据集的长度
         self.trainset_nums = len(dataset.trainset)
         self.validset_nums = len(dataset.validset)
         self.testset_nums = len(dataset.testset)
         self.language_name = self.dataset.language_name  # Spanish
         self.dataset_name = self.dataset.dataset # conll14
-        # 在abstract_dataloader里面定义的：
-        # self.train_batch_size = config["train_batch_size"]  # train的batch中包含的句子数
-        # self.test_batch_size = config["test_batch_size"]  # test的batch中包含的句子数
 
-        # 计算三个数据集batch 的总数
         self.trainset_batch_nums = self.trainset_nums/self.train_batch_size
         self.validset_batch_nums = self.validset_nums/self.test_batch_size
 
-        self.max_input_len = config["max_input_len"] # 暂时没有 copy的gec_dataloader
+        self.max_input_len = config["max_input_len"]
 
-        # 根据语言zh/en选择tokenizer
         self.pretrained_tokenizer = SyngecTokenizer(dataset,self.language_name).tokenizer
 
-        # t5large需要改中文字符
         self.replaced_symbols = []
 
-        self.args = self.dataset.args_bart     # bart
-        self.task = self.dataset.task_bart     # bart
-        self.args.required_batch_size_multiple = 1  # 要求批次大小是某个数目的倍数
-        self.args.batch_size = self.train_batch_size  # train的batch_size
+        self.args = self.dataset.args_bart
+        self.task = self.dataset.task_bart
+        self.args.required_batch_size_multiple = 1
+        self.args.batch_size = self.train_batch_size
         self.args.max_epoch = config["epoch_nums"]
 
-        # 获取到 model 和 criteron
         self.model = None
         self.criterion = None
         self.quantizer = None
@@ -179,7 +170,6 @@ class SyngecDataLoader(AbstractDataLoader):
 
         self.get_trainer()
 
-        # 获取testset的迭代器
         self.valid_itr = self.build_valid_itr()
         self.test_itr = self.build_test_itr()
         self.train_itr = self.build_train_itr()
@@ -232,13 +222,12 @@ class SyngecDataLoader(AbstractDataLoader):
         args = self.dataset.args_generate
         testset = self.dataset.testset
         max_positions = (1024, 1024)
-        max_sentences = self.test_batch_size  # test的batch size=1
+        max_sentences = self.test_batch_size
         itr = task.get_batch_iterator(
             dataset=testset,
-            # max_tokens=args.max_tokens,       # 每个batch中最多有多少个tokens  none
             max_sentences=max_sentences,
-            max_positions=max_positions,      # 模型支持的最大句子长度
-            ignore_invalid_inputs=args.skip_invalid_size_inputs_valid_test,  # false
+            max_positions=max_positions,
+            ignore_invalid_inputs=args.skip_invalid_size_inputs_valid_test,
             type='test'
         ).next_epoch_itr(shuffle=False)
         return itr
@@ -248,13 +237,12 @@ class SyngecDataLoader(AbstractDataLoader):
         args = self.dataset.args_generate
         validset = self.dataset.validset
         max_positions = (1024, 1024)
-        max_sentences = self.test_batch_size  # valid和test的batch size相等 ，=1
+        max_sentences = self.test_batch_size
         itr = task.get_batch_iterator(
             dataset=validset,
-            # max_tokens=args.max_tokens,  # 每个batch中最多有多少个tokens  none
             max_sentences=max_sentences,
-            max_positions=max_positions,  # 模型支持的最大句子长度
-            ignore_invalid_inputs=args.skip_invalid_size_inputs_valid_test,  # false
+            max_positions=max_positions,
+            ignore_invalid_inputs=args.skip_invalid_size_inputs_valid_test,
             type='valid'
         ).next_epoch_itr(shuffle=False)
         return itr
@@ -293,19 +281,16 @@ class SyngecDataLoader(AbstractDataLoader):
         self.validset_batches = []
         self.testset_batches = []
 
-        # 构建valdiset的batch
         for batch in self.valid_itr:
             batch['source_list_batch'] = batch['net_input']['src_tokens']
             batch['target_list_batch'] = batch['target']
             self.validset_batches.append(batch)
 
-        # 构建testset的batch
         for batch in self.test_itr:
             batch['source_list_batch'] = batch['net_input']['src_tokens']
             batch['target_list_batch'] = batch['target']
             self.testset_batches.append(batch)
 
-        # 构建trainset的batch
         for batch in self.train_itr:
             batch = batch[0]
             batch['source_list_batch'] = batch['net_input']['src_tokens']
@@ -317,4 +302,4 @@ class SyngecDataLoader(AbstractDataLoader):
         self.__testset_batch_idx = -1
         self.trainset_batch_nums = len(self.trainset_batches)
         self.validset_batch_nums = len(self.validset_batches)
-        self.testset_batch_nums = len(self.testset_batches)        # 2000
+        self.testset_batch_nums = len(self.testset_batches)

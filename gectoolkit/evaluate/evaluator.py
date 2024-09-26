@@ -107,10 +107,8 @@ class Evaluator(object):
                 else:
                     FN += 1
 
-        # For the correction Precision, Recall and F1
         correction_precision = TP / (TP + FP) if (TP+FP) > 0 else 0
         correction_recall = TP / (TP + FN) if (TP+FN) > 0 else 0
         correction_f1 = 1.25 * (correction_precision * correction_recall) / (0.25 * correction_precision + correction_recall) if (correction_precision + correction_recall) > 0 else 0
-        #print("The correction  result is precision={}, recall={} and F1={}".format(correction_precision, correction_recall, correction_f1))
 
         return detection_f1, correction_f1

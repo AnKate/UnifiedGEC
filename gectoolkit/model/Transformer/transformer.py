@@ -61,23 +61,17 @@ class Transformer(nn.Module):
         self.tokenizer = dataset
         dataset_size = len(dataset.vocab)
 
-        # input embedding, 对输入序列进行嵌入
         self.in_tok_embed = Embedding(dataset_size, self.embedding_size, self.padding_id)
-        # positional encoding, 得到序列的位置编码
         self.positional_embed = LearnedPositionalEmbedding(self.embedding_size, device=self.device)
 
-        # self attention mask, 得到的self mask将用于DecodeLayer
         self.self_attention_mask = SelfAttentionMask(device=self.device)
-        # 由N=6个EncodeLayer堆叠成的LayerStack, 构成Transformer的encoder部分
         self.encoder_stack = nn.ModuleList(
             [TransformerLayer(self.embedding_size, self.ff_embedding_size, self.num_heads, self.dropout)
              for _ in range(self.layer_num)])
-        # 由N=6个DecodeLayer堆叠成的LayerStack, 构成Transformer的decoder部分
         self.decoder_stack = nn.ModuleList(
             [TransformerLayer(self.embedding_size, self.ff_embedding_size, self.num_heads, self.dropout,
                               with_external=True) for _ in range(self.layer_num)])
 
-        # 对decoder输出结果的后处理, Linear+Softmax得到概率分布
         self.out_tok_embed = nn.Linear(self.embedding_size, dataset_size)
         self.out_tok_embed.weight = copy.deepcopy(self.in_tok_embed.weight)
 
@@ -107,7 +101,6 @@ class Transformer(nn.Module):
         """
 
         # convert indexed sentences into the required format for the model training
-        # 这一步会将source和target的长度变成相同的seq_len
         batch = tensor_ready(batch, self.vocab, is_train=True)
 
         # truncate indexed sentences into a batch where the sentence lengths are same in the same batch

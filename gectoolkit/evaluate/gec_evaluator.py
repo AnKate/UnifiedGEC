@@ -16,7 +16,7 @@ from gectoolkit.utils.compare_m2 import simplify_edits, process_edits, evaluate_
 
 def save_to_txt_file(text, filename):
     """
-    将text写入filename文件
+    write text to file
     """
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(text)
@@ -24,7 +24,7 @@ def save_to_txt_file(text, filename):
 
 def get_errant_edits(src, tgt):
     """
-    基于输入语句生成m2格式的edit
+    generate m2 edits
     """
     nlp = spacy.load("en_core_web_sm")
     annotator = errant.load("en", nlp)
@@ -64,30 +64,25 @@ class GECEvaluator(object):
         gec的评测
         """
 
-        # 将数字转换成对应汉字
         if self.model != 'GECToR':
             sources = self.tokenizer.decode(sources)
             labels = self.tokenizer.decode(labels)
             predicts = self.tokenizer.decode([int(i) for i in predicts], skip_special_tokens=True)
 
         if self.language == "zh":
-            # 拼接成字符串
             if self.model == 'GECToR':
                 sources = ''.join(sources)
                 labels = ''.join(labels)
                 predicts = ''.join(predicts)
 
-            # 将source与predict、target分别用‘\t’拼接
             source_predict = sources + '\t' + predicts
             source_target = sources + '\t' + labels
 
-            # 将source_predict存入hyp地址中、source_target存入ref地址中
             hyp = os.path.join(self.tmp_save_path, "hyp.para")
             save_to_txt_file(source_predict, hyp)
             ref = os.path.join(self.tmp_save_path, "ref.para")
             save_to_txt_file(source_target, ref)
 
-            # 将 hyp 和 ref 转成m2格式
             hyp_m2_char = os.path.join(self.tmp_save_path, "hyp.m2.char")
             ref_m2_char = os.path.join(self.tmp_save_path, "ref.m2.char")
 
@@ -99,10 +94,8 @@ class GECEvaluator(object):
 
             compare_args = compare_m2_for_evaluation.Args(hyp=hyp_m2_char, ref=ref_m2_char)
 
-            # 将转换成m2格式的hyp和ref进行对比，返回 TP,FP,FN,Prec,Rec,F
             TP, FP, FN, Prec, Rec, F = compare_m2_for_evaluation.main(compare_args)
 
-            # gec任务评估返回一个字典
             gec_evaluate_dict = {
                 "TP": TP,
                 "FP": FP,
@@ -111,17 +104,12 @@ class GECEvaluator(object):
                 "Rec": Rec,
                 "F0.5": F
             }
-            # return gec_evaluate_dict
             return Prec, Rec, F
         else:
             if self.model == 'GECToR':
                 sources = ' '.join(sources)
                 labels = ' '.join(labels)
                 predicts = ' '.join(predicts)
-
-            # print("sources:", sources)
-            # print("labels:", labels)
-            # print("predicts:", predicts)
 
             ref = get_errant_edits(sources, labels).strip()
             hyp = get_errant_edits(sources, predicts).strip()

@@ -59,7 +59,6 @@ class SynGEC(nn.Module):
         alignment_layer = None
         alignment_heads = None
 
-        # 放到gpu上进行运算
         if self.use_gpu:
             src_tokens = src_tokens.cuda()
             src_lengths = src_lengths.cuda()
